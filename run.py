@@ -7,7 +7,7 @@ class Board:
     """
     def __init__(self, size):
         self.size = size
-        self.grid = [['0'] * size for _ in range(size)]
+        self.grid = [['*'] * size for _ in range(size)]
 
     def display(self):
         for row in self.grid:
@@ -15,12 +15,43 @@ class Board:
 
     def is_valid(self, row, col):
         return 0 <= row < self.size and 0 <= col < self.size
+
     
-class Battelship:
+class Battleship:
     """
     Class responsible for managing the battleship's location and checking 
     guesses
     """
     def __init__(self, board_size):
         self.row = random.randint(0, board_size - 1)
+        self.col = random.randint(0, board_size - 1)
+
+    def check_guess(self, guess_row, guess_col):
+        """
+        Function to check if the guess hit or missed the ship
+        """
+        if guess_row == self.row and guess_col == self.col:
+            return "hit"
+        else:
+            return "miss"
+
+
+
+class Game:
+    """
+    Class responsible for managing the game flow and player interaction
+    """
+    def __init__(self, board_size):
+        self.board = Board(board_size)
+        self.battleship = Battleship(board_size)
+        self.attempts = 0
         
+    def play(self):
+        while True:
+            print("\nAttempts:", self.attempts)
+            self.board.display()
+
+            guess_row = int(input("Guess a Row: "))
+            guess_col = int(input("Guess a Column: "))
+            
+   
