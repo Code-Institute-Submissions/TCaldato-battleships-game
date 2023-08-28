@@ -36,7 +36,6 @@ class Battleship:
             return "miss"
 
 
-
 class Game:
     """
     Class responsible for managing the game flow and player interaction
@@ -44,14 +43,38 @@ class Game:
     def __init__(self, board_size):
         self.board = Board(board_size)
         self.battleship = Battleship(board_size)
-        self.attempts = 0
+        self.attempts = 1
         
     def play(self):
         while True:
-            print("\nAttempts:", self.attempts)
+            print("\nYou have 5 Guesses: Attempt", self.attempts)
             self.board.display()
 
             guess_row = int(input("Guess a Row: "))
             guess_col = int(input("Guess a Column: "))
             
-   
+            if not self.board.is_valid(guess_row, guess_col):
+                print("Oops, Values must be between 0 and 4!")
+            else:
+                self.attempts += 1
+                result = self.battleship.check_guess(guess_row, guess_col)
+                
+                if result == "hit":
+                    print("Congratulations! You sunk my battleship!")
+                    break
+                else:
+                    print("You missed my battleship!")
+                    self.board.grid[guess_row][guess_col] = 'X'
+                
+                if self.attempts >= 6:
+                    print("Game Over! You've used all your attempts.")
+                    print("The battleship was located at row", self.battleship.row, "and column", self.battleship.col)
+                    break
+                    
+def main():
+    board_size = 5
+    game = Game(board_size)
+    game.play()
+
+# Call the main function to start the game
+main()
