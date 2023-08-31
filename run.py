@@ -6,7 +6,7 @@ class Board:
     """
     def __init__(self, size):
         self.size = size
-        self.grid = [['*'] * size for _ in range(size)]
+        self.grid = [['*'] * size for s in range(size)]
 
     def display(self):
         for row in self.grid:
@@ -61,6 +61,9 @@ class Game:
         
 
     def unique_random_guess(self):
+        """"
+        Function responsible for creating an unique random guess for computer.
+        """
         while True:
             guess_row = random.randint(0, self.computer_board.size - 1)
             guess_col = random.randint(0, self.computer_board.size - 1)
@@ -86,7 +89,8 @@ class Game:
                 
                 if result == "hit":
                     print("Congratulations! You sunk my battleship!")
-                    break
+                    self.restart_game()
+                    return
                 else:
                     print("You missed my battleship!")
                     self.user_board.grid[guess_row][guess_col] = 'X'
@@ -94,7 +98,8 @@ class Game:
                 if self.user_attempts >= 6:
                     print("Game Over! You've used all your attempts.")
                     print("The battleship was located at row", self.user_battleship.row, "and column", self.user_battleship.col)
-                    break
+                    self.restart_game()
+                    return
 
 
                 print("\nComputer's turn")
@@ -105,10 +110,24 @@ class Game:
                 
                 if result == "hit":
                     print("Oh no! The computer hit your battleship!")
-                    break
+                    self.restart_game()
+                    return
                 else:
                     print("Phew! The computer missed your battleship!")
-                    self.computer_board.grid[guess_row][guess_col] = 'O'                    
+                    self.computer_board.grid[guess_row][guess_col] = 'O'
+
+        
+    def restart_game(self):
+        """
+        Restart the game when Computer or User ship sink or when user 
+        has used up all their attempts.
+        """
+        play_again = input("Do you want to play again? (yes/no): ")
+        if play_again.lower() == 'yes':
+            main()
+        else:
+            print("Thank you for playing! Goodbye!")
+            exit()
 
                     
 def main():
@@ -123,5 +142,5 @@ def main():
     game = Game(board_size)
     game.play()
 
-# Call the main function to start the game
+# Main function to start the game
 main()
