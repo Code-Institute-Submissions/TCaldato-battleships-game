@@ -116,7 +116,14 @@ class Game:
                     print("Phew! The computer missed your battleship!")
                     self.computer_board.grid[guess_row][guess_col] = 'O'
 
-        
+
+    def display_user_ship(self):
+        print("\nYour ship's location:\n")
+        self.user_board.grid[self.user_battleship.row][self.user_battleship.col] = 'S'  # Mark the user's ship
+        self.user_board.display()  # Display the user's board
+        self.user_board.grid[self.user_battleship.row][self.user_battleship.col] = '*'  # Reset the board
+
+
     def restart_game(self):
         """
         Restart the game when Computer or User ship sink or when user 
@@ -140,6 +147,7 @@ def main():
     print("Let's play!!!")
     board_size = 5
     game = Game(board_size)
+    game.display_user_ship()
     game.play()
 
 # Main function to start the game
