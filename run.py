@@ -16,6 +16,9 @@ class Board:
         return 0 <= row < self.size and 0 <= col < self.size
     
     def mark_guess(self, row, col, mark):
+        """
+        Function that mark the computer's guess and user's guess
+        """
         self.grid[row][col] = mark
 
 
@@ -168,12 +171,16 @@ def main():
     print("In this game you have 5 attempts to try sink computer's ship")
     print("Do you think you can do it???")
     while True:
-        board_size = int(input("Enter the grid size between 5 to 10 (e.g., 5 for a 5x5 grid): "))  # Prompt for grid size
-        if 4 <= board_size <= 10:
-            break
-        else:
-            print("Grid size must be between 5 and 10. Please try again.")
-    print("Let's play!!!")
+        try:
+            board_size = int(input("Enter the grid size between 5 to 10 (e.g., 5 for a 5x5 grid): "))
+            if 5 <= board_size <= 10:
+                break
+            else:
+                print("Grid size must be between 5 and 10. Please try again.")
+        except ValueError:
+            print("It is not a number, try again.")
+            
+    print("\nLet's play!!!")
     
     game = Game(board_size)
     game.display_user_ship()
