@@ -61,6 +61,7 @@ class Game:
         self.user_board = Board(board_size)
         self.user_battleship = Battleship(board_size)
         self.user_attempts = 1
+        self.user_prev_attempt = None # Variable to store the previous user's attempts
         
         # Create a battleship object for the computer
         computer_battleship = Battleship(board_size)
@@ -89,7 +90,14 @@ class Game:
             self.user_board.display()
             guess_row = int(input("Guess a Row: "))
             guess_col = int(input("Guess a Column: "))
-            self.user_attempts += 1        
+
+            # Check if the current attempt is the same as the previous attempt
+            if self.user_prev_attempt == (guess_row, guess_col):
+                print("Same Attempt as Before, Try Again:")
+                continue  # Skip the rest of the loop and ask for a new attempt
+
+            self.user_prev_attempt = (guess_row, guess_col)  # Store the current attempt
+            self.user_attempts += 1       
             
             # Validate user's guess
             if not self.user_board.is_valid(guess_row, guess_col):
@@ -134,7 +142,7 @@ class Game:
         """
         This Function display the location of the user's ship on the computer's board
         """
-        print("\nYour ship's location on Computer's Board\n")
+        print("\nYour ship's location on Computer's Board:")
         self.computer_board.grid[self.computer_battleship.row][self.computer_battleship.col] = 'S'  # Mark the user's ship
         self.computer_board.display()  # Display the user's board
 
