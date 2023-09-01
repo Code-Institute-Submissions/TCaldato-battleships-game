@@ -101,7 +101,7 @@ class Game:
             
             # Validate user's guess
             if not self.user_board.is_valid(guess_row, guess_col):
-                print("Oops, Values must be between 0 and 4!")
+                print("Oops, Values MUST be between the Grid Size you Chose")
             else:
                 result = self.user_battleship.check_guess(guess_row, guess_col)
                 # Process user's guess
@@ -167,8 +167,14 @@ def main():
     print("\nWelcome to Battleship Game")
     print("In this game you have 5 attempts to try sink computer's ship")
     print("Do you think you can do it???")
+    while True:
+        board_size = int(input("Enter the grid size between 5 to 10 (e.g., 5 for a 5x5 grid): "))  # Prompt for grid size
+        if 4 <= board_size <= 10:
+            break
+        else:
+            print("Grid size must be between 5 and 10. Please try again.")
     print("Let's play!!!")
-    board_size = 5
+    
     game = Game(board_size)
     game.display_user_ship()
     game.play()
