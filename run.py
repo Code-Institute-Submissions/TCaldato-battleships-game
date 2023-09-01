@@ -14,6 +14,9 @@ class Board:
 
     def is_valid(self, row, col):
         return 0 <= row < self.size and 0 <= col < self.size
+    
+    def mark_guess(self, row, col, mark):
+        self.grid[row][col] = mark
 
 
 class Battleship:
@@ -37,13 +40,18 @@ class Battleship:
 
 class ComputerBoard(Board):
     """
-    Class for managing the computer's board
+    Class for managing the computer's board, including the user's ship display
     """
-    def __init__(self, size, battleship=None):
+    def __init__(self, size, battleship=None, user_battleship=None):
         super().__init__(size)
+        self.user_battleship = user_battleship
         if battleship:
             self.battleship = battleship
-            self.grid[self.battleship.row][self.battleship.col] = 'O'
+            self.grid[self.battleship.row][self.battleship.col] = '@'
+
+
+    def mark_guess(self, row, col, mark):
+        self.grid[row][col] = mark
 
 class Game:
     """
@@ -62,7 +70,7 @@ class Game:
 
     def unique_random_guess(self):
         """"
-        Function responsible for creating an unique random guess for computer.
+        Function responsible for creating an unique random guess for the computer.
         """
         while True:
             guess_row = random.randint(0, self.computer_board.size - 1)
@@ -76,24 +84,27 @@ class Game:
         Function responsible for interaction with user and computer
         """
         while True:
+            # User's turn
             print("\nYour turn! You have 5 Guesses: Attempt", self.user_attempts)
             self.user_board.display()
             guess_row = int(input("Guess a Row: "))
             guess_col = int(input("Guess a Column: "))
             self.user_attempts += 1        
             
+            # Validate user's guess
             if not self.user_board.is_valid(guess_row, guess_col):
                 print("Oops, Values must be between 0 and 4!")
             else:
                 result = self.user_battleship.check_guess(guess_row, guess_col)
-                
+                # Process user's guess
                 if result == "hit":
                     print("Congratulations! You sunk my battleship!")
+                    self.user_board.mark_guess(guess_row, guess_col, 'X')
                     self.restart_game()
                     return
                 else:
                     print("You missed my battleship!")
-                    self.user_board.grid[guess_row][guess_col] = 'X'
+                    self.user_board.mark_guess(guess_row, guess_col, 'O')
                 
                 if self.user_attempts >= 6:
                     print("Game Over! You've used all your attempts.")
@@ -101,11 +112,12 @@ class Game:
                     self.restart_game()
                     return
 
-
                 print("\nComputer's turn")
-                self.computer_board.display()
                 guess_row, guess_col = self.unique_random_guess()
                 result = self.computer_battleship.check_guess(guess_row, guess_col)
+                self.computer_board.mark_guess(guess_row, guess_col, 'X')
+
+                self.computer_board.display()  # Display the computer's board
                 # Process computer's guess and update computer's board
                 
                 if result == "hit":
@@ -114,14 +126,17 @@ class Game:
                     return
                 else:
                     print("Phew! The computer missed your battleship!")
-                    self.computer_board.grid[guess_row][guess_col] = 'O'
+                    self.computer_board.mark_guess(guess_row, guess_col, 'X')  
+                    # Mark the guess on the computer's board
 
 
     def display_user_ship(self):
-        print("\nYour ship's location:\n")
-        self.user_board.grid[self.user_battleship.row][self.user_battleship.col] = 'S'  # Mark the user's ship
-        self.user_board.display()  # Display the user's board
-        self.user_board.grid[self.user_battleship.row][self.user_battleship.col] = '*'  # Reset the board
+        """
+        This Function display the location of the user's ship on the computer's board
+        """
+        print("\nYour ship's location on Computer's Board\n")
+        self.computer_board.grid[self.computer_battleship.row][self.computer_battleship.col] = 'S'  # Mark the user's ship
+        self.computer_board.display()  # Display the user's board
 
 
     def restart_game(self):
