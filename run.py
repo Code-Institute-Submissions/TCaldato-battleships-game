@@ -9,17 +9,15 @@ class Board:
         self.grid = [['*'] * size for s in range(size)]
 
     def display(self):
-        for row in self.grid:
-            print(" ".join(row))
+        print("   " + " ".join(str(i + 1) for i in range(self.size)))
+        for i, row in enumerate(self.grid):
+            print(str(i + 1) + " | " + " ".join(row))
 
     def is_valid(self, row, col):
-        return 0 <= row < self.size and 0 <= col < self.size
-    
+        return 1 <= row <= self.size and 1 <= col <= self.size
+
     def mark_guess(self, row, col, mark):
-        """
-        Function that mark the computer's guess and user's guess
-        """
-        self.grid[row][col] = mark
+        self.grid[row - 1][col - 1] = mark
 
 
 class Battleship:
@@ -28,8 +26,8 @@ class Battleship:
     guesses
     """
     def __init__(self, board_size):
-        self.row = random.randint(0, board_size - 1)
-        self.col = random.randint(0, board_size - 1)
+        self.row = random.randint(1, board_size)
+        self.col = random.randint(1, board_size)
 
     def check_guess(self, guess_row, guess_col):
         """
@@ -51,13 +49,13 @@ class ComputerBoard(Board):
         self.battleships = []
 
         # Determine the number of battleships based on grid size
-        num_battleships = size - 1  # For example, 5x5 grid will have 4 battleships, 6x6 will have 5, and so on.
+        num_battleships = size * 2  # For example, 5x5 grid will have 10 battleships, 6x6 will have 12, and so on.
 
         # Create and place battleships
         for _ in range(num_battleships):
             battleship = Battleship(size)
             self.battleships.append(battleship)
-            self.grid[battleship.row][battleship.col] = '@'
+            self.grid[battleship.row - 1][battleship.col - 1] = '@'
 
     def mark_guess(self, row, col, mark):
         self.grid[row][col] = mark
@@ -83,8 +81,8 @@ class Game:
         Function responsible for creating an unique random guess for the computer.
         """
         while True:
-            guess_row = random.randint(0, self.computer_board.size - 1)
-            guess_col = random.randint(0, self.computer_board.size - 1)
+            guess_row = random.randint(1, self.computer_board.size)
+            guess_col = random.randint(1, self.computer_board.size)
             if self.computer_board.grid[guess_row][guess_col] == '*': 
                 return guess_row, guess_col
             
@@ -169,11 +167,8 @@ class Game:
 
                     
 def main():
-    """
-    Main function to start the game
-    """
     print("\nWelcome to Battleship Game")
-    print("In this game you have 5 attempts to try sink computer's ship")
+    print("In this game, you have 5 attempts to try to sink the computer's ship.")
     print("Do you think you can do it???")
     while True:
         try:
@@ -191,5 +186,5 @@ def main():
     game.display_user_ship()
     game.play()
 
-# Main function to start the game
-main()
+if __name__ == "__main__":
+    main()
