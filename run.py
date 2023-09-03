@@ -9,14 +9,23 @@ class Board:
         self.grid = [['*'] * size for s in range(size)]
 
     def display(self):
+        """
+        Display the grid with row and column numbering
+        """
         print("   " + " ".join(str(i + 1) for i in range(self.size)))
         for i, row in enumerate(self.grid):
             print(str(i + 1) + " | " + " ".join(row))
 
     def is_valid(self, row, col):
+        """
+        Check if the given row and column values are within the grid boundaries
+        """
         return 1 <= row <= self.size and 1 <= col <= self.size
 
-    def mark_guess(self, row, col, mark):
+    def mark_guess(self, row, col, mark): 
+        """
+        Mark the grid cell with the specified mark
+        """
         self.grid[row - 1][col - 1] = mark
 
 
@@ -26,6 +35,9 @@ class Battleship:
     guesses
     """
     def __init__(self, board_size):
+        """
+        Generate a random battleship location within the grid boundaries
+        """
         self.row = random.randint(1, board_size)
         self.col = random.randint(1, board_size)
 
@@ -47,18 +59,33 @@ class ComputerBoard(Board):
         super().__init__(size)
         self.user_battleship = None
         self.battleships = []
+        self.chosen_locations = set()
 
         # Determine the number of battleships based on grid size
         num_battleships = size * 2  # For example, 5x5 grid will have 10 battleships, 6x6 will have 12, and so on.
 
-        # Create and place battleships
+        # Create and place battleships on the computer's board
         for _ in range(num_battleships):
-            battleship = Battleship(size)
+            battleship = self.generate_unique_battleship(size)
             self.battleships.append(battleship)
             self.grid[battleship.row - 1][battleship.col - 1] = '@'
 
+    def generate_unique_battleship(self, size):
+        """
+        Generate a unique battleship location for the computer
+        """
+        while True:
+            battleship = Battleship(size)
+            location = (battleship.row, battleship.col)
+            if location not in self.chosen_locations:
+                self.chosen_locations.add(location)
+                return battleship
+
     def mark_guess(self, row, col, mark):
-        self.grid[row][col] = mark
+        """
+        Mark the grid cell with the specified mark
+        """
+        self.grid[row - 1][col - 1] = mark
 
 class Game:
     """
@@ -83,7 +110,7 @@ class Game:
         while True:
             guess_row = random.randint(1, self.computer_board.size)
             guess_col = random.randint(1, self.computer_board.size)
-            if self.computer_board.grid[guess_row][guess_col] == '*': 
+            if self.computer_board.grid[guess_row - 1][guess_col - 1] == '*': 
                 return guess_row, guess_col
             
     
@@ -127,6 +154,7 @@ class Game:
                     self.restart_game()
                     return
 
+                # Computer's turn
                 print("\nComputer's turn")
                 guess_row, guess_col = self.unique_random_guess()
                 result = self.computer_battleship.check_guess(guess_row, guess_col)
