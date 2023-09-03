@@ -45,13 +45,19 @@ class ComputerBoard(Board):
     """
     Class for managing the computer's board, including the user's ship display
     """
-    def __init__(self, size, battleship=None, user_battleship=None):
+    def __init__(self, size):
         super().__init__(size)
-        self.user_battleship = user_battleship
-        if battleship:
-            self.battleship = battleship
-            self.grid[self.battleship.row][self.battleship.col] = '@'
+        self.user_battleship = None
+        self.battleships = []
 
+        # Determine the number of battleships based on grid size
+        num_battleships = size - 1  # For example, 5x5 grid will have 4 battleships, 6x6 will have 5, and so on.
+
+        # Create and place battleships
+        for _ in range(num_battleships):
+            battleship = Battleship(size)
+            self.battleships.append(battleship)
+            self.grid[battleship.row][battleship.col] = '@'
 
     def mark_guess(self, row, col, mark):
         self.grid[row][col] = mark
@@ -68,7 +74,7 @@ class Game:
         
         # Create a battleship object for the computer
         computer_battleship = Battleship(board_size)
-        self.computer_board = ComputerBoard(board_size, computer_battleship)
+        self.computer_board = ComputerBoard(board_size)
         self.computer_battleship = computer_battleship
         
 
@@ -146,7 +152,6 @@ class Game:
         This Function display the location of the user's ship on the computer's board
         """
         print("\nYour ship's location on Computer's Board:")
-        self.computer_board.grid[self.computer_battleship.row][self.computer_battleship.col] = 'S'  # Mark the user's ship
         self.computer_board.display()  # Display the user's board
 
 
@@ -177,7 +182,7 @@ def main():
                 break
             else:
                 print("Grid size must be between 5 and 10. Please try again.")
-        except ValueError:
+        except ValueError: 
             print("It is not a number, try again.")
             
     print("\nLet's play!!!")
