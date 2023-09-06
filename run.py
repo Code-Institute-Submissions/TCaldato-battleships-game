@@ -1,218 +1,121 @@
-import random #Built-in module to make random numbers.
+import random
 
+# Constants
+USER_SHIP = "U"
+COMP_SHIP = "C"
+HIT = "X"
+GRID_SIZE_MIN = 5
+GRID_SIZE_MAX = 9
+NUM_SHIPS = 3
+SHIP_SIZE = 3
+
+# Class representing the game board
 class Board:
-    """
-    Main Board class that is reponsible for managing the game board
-    """
     def __init__(self, size):
         self.size = size
-        self.grid = [['*'] * size for s in range(size)]
+        self.grid = [['*'] * size for _ in range(size)]
 
-    def display(self):
+    def mark_hit(self, row, col):
+        self.grid[row - 1][col - 1] = HIT
+
+    def display_grid(self):
         """
         Display the grid with row and column numbering
         """
-        print("   " + " ".join(str(i + 1) for i in range(self.size)))
+        print("    " + " ".join(str(i + 1) for i in range(self.size)))
         for i, row in enumerate(self.grid):
             print(str(i + 1) + " | " + " ".join(row))
 
-    def is_valid(self, row, col):
-        """
-        Check if the given row and column values are within the grid boundaries
-        """
-        return 1 <= row <= self.size and 1 <= col <= self.size
+# Class representing the user's board
+class UserBoard(Board):
+    def place_ships(self):
+        for _ in range(NUM_SHIPS):
+            while True:
+                row = random.randint(1, self.size)
+                col = random.randint(1, self.size)
+                if self.grid[row - 1][col - 1] == '*':
+                    self.grid[row - 1][col - 1] = COMP_SHIP
+                    break
 
-    def mark_guess(self, row, col, mark): 
-        """
-        Mark the grid cell with the specified mark
-        """
-        self.grid[row - 1][col - 1] = mark
-
-
-class Battleship:
-    """
-    Class responsible for managing the battleship's location and checking 
-    guesses
-    """
-    def __init__(self, board_size):
-        """
-        Generate a random battleship location within the grid boundaries
-        """
-        self.row = random.randint(1, board_size)
-        self.col = random.randint(1, board_size)
-
-    def check_guess(self, guess_row, guess_col):
-        """
-        Function to check if the guess hit or missed the ship
-        """
-        if guess_row == self.row and guess_col == self.col:
-            return "hit"
-        else:
-            return "miss"
-
-
+# Class representing the computer's board
 class ComputerBoard(Board):
-    """
-    Class for managing the computer's board, including the user's ship display
-    """
+    def place_ships(self):
+        for _ in range(NUM_SHIPS):
+            while True:
+                row = random.randint(1, self.size)
+                col = random.randint(1, self.size)
+                if self.grid[row - 1][col - 1] == '*':
+                    self.grid[row - 1][col - 1] = USER_SHIP
+                    break
+
+# Class to manage the game
+class BattleshipGame:
     def __init__(self, size):
-        super().__init__(size)
-        self.user_battleship = None
-        self.battleships = []
-        self.chosen_locations = set()
+        self.user_board = UserBoard(size)
+        self.comp_board = ComputerBoard(size)
+        self.user_board.place_ships()
+        self.comp_board.place_ships()
 
-        # Determine the number of battleships based on grid size
-        num_battleships = size * 2  # For example, 5x5 grid will have 10 battleships, 6x6 will have 12, and so on.
-
-        # Create and place battleships on the computer's board
-        for _ in range(num_battleships):
-            battleship = self.generate_unique_battleship(size)
-            self.battleships.append(battleship)
-            self.grid[battleship.row - 1][battleship.col - 1] = '@'
-
-    def generate_unique_battleship(self, size):
-        """
-        Generate a unique battleship location for the computer
-        """
-        while True:
-            battleship = Battleship(size)
-            location = (battleship.row, battleship.col)
-            if location not in self.chosen_locations:
-                self.chosen_locations.add(location)
-                return battleship
-
-    def mark_guess(self, row, col, mark):
-        """
-        Mark the grid cell with the specified mark
-        """
-        self.grid[row - 1][col - 1] = mark
-
-class Game:
-    """
-    Class responsible for managing the game flow and player interaction
-    """
-    def __init__(self, board_size):
-        self.user_board = Board(board_size)
-        self.user_battleship = Battleship(board_size)
-        self.user_attempts = 1
-        self.user_prev_attempt = None # Variable to store the previous user's attempts
-        
-        # Create a battleship object for the computer
-        computer_battleship = Battleship(board_size)
-        self.computer_board = ComputerBoard(board_size)
-        self.computer_battleship = computer_battleship
-        
-
-    def unique_random_guess(self):
-        """"
-        Function responsible for creating an unique random guess for the computer.
-        """
-        while True:
-            guess_row = random.randint(1, self.computer_board.size)
-            guess_col = random.randint(1, self.computer_board.size)
-            if self.computer_board.grid[guess_row - 1][guess_col - 1] == '*': 
-                return guess_row, guess_col
-            
-    
     def play(self):
-        """
-        Function responsible for interaction with user and computer
-        """
         while True:
-            # User's turn
-            print("\nYour turn! You have 5 Guesses: Attempt", self.user_attempts)
-            self.user_board.display()
-            guess_row = int(input("Guess a Row: "))
-            guess_col = int(input("Guess a Column: "))
+            print("User's Board:")
+            self.user_board.display_grid()
+            print("\nComputer's Board:")
+            self.comp_board.display_grid()
+            user_row = int(input(f"Enter row (1 to {self.user_board.size - 1}): "))
+            user_col = int(input(f"Enter col (1 to {self.user_board.size - 1}): "))
 
-            # Check if the current attempt is the same as the previous attempt
-            if self.user_prev_attempt == (guess_row, guess_col):
-                print("Same Attempt as Before, Try Again:")
-                continue  # Skip the rest of the loop and ask for a new attempt
-
-            self.user_prev_attempt = (guess_row, guess_col)  # Store the current attempt
-            self.user_attempts += 1       
-            
-            # Validate user's guess
-            if not self.user_board.is_valid(guess_row, guess_col):
-                print("Oops, Values MUST be between the Grid Size you Chose")
+            if (
+                0 <= user_row < self.user_board.size
+                and 0 <= user_col < self.user_board.size
+            ):
+                if self.comp_board.grid[user_row - 1][user_col - 1] == COMP_SHIP:
+                    print("User hit a computer ship!")
+                    self.comp_board.mark_hit(user_row, user_col)
+                else:
+                    print("User missed.")
+                    self.user_board.mark_hit(user_row, user_col)
+                # Check for game over condition
+                if all(
+                    all(cell == HIT or cell == USER_SHIP for cell in row)
+                    for row in self.comp_board.grid
+                ):
+                    print("User wins!")
+                    break
+                comp_row = random.randint(1, self.comp_board.size)
+                comp_col = random.randint(1, self.comp_board.size)
+                if self.user_board.grid[comp_row - 1][comp_col - 1] == USER_SHIP:
+                    print("Computer hit a user ship!")
+                    self.user_board.mark_hit(comp_row, comp_col)
+                else:
+                    print("Computer missed.")
+                    self.comp_board.mark_hit(comp_row, comp_col)
+                # Check for game over condition
+                if all(
+                    all(cell == HIT or cell == COMP_SHIP for cell in row)
+                    for row in self.user_board.grid
+                ):
+                    print("Computer wins!")
+                    break
             else:
-                result = self.user_battleship.check_guess(guess_row, guess_col)
-                # Process user's guess
-                if result == "hit":
-                    print("Congratulations! You sunk my battleship!")
-                    self.user_board.mark_guess(guess_row, guess_col, 'X')
-                    self.restart_game()
-                    return
-                else:
-                    print("You missed my battleship!")
-                    self.user_board.mark_guess(guess_row, guess_col, 'O')
-                
-                if self.user_attempts >= 6:
-                    print("Game Over! You've used all your attempts.")
-                    print("The battleship was located at row", self.user_battleship.row, "and column", self.user_battleship.col)
-                    self.restart_game()
-                    return
+                print("Invalid input. Row and column must be within range.")
 
-                # Computer's turn
-                print("\nComputer's turn")
-                guess_row, guess_col = self.unique_random_guess()
-                result = self.computer_battleship.check_guess(guess_row, guess_col)
-                self.computer_board.mark_guess(guess_row, guess_col, 'X')
-
-                self.computer_board.display()  # Display the computer's board
-                # Process computer's guess and update computer's board
-                
-                if result == "hit":
-                    print("Oh no! The computer hit your battleship!")
-                    self.restart_game()
-                    return
-                else:
-                    print("Phew! The computer missed your battleship!")
-                    self.computer_board.mark_guess(guess_row, guess_col, 'X')  
-                    # Mark the guess on the computer's board
-
-
-    def display_user_ship(self):
-        """
-        This Function display the location of the user's ship on the computer's board
-        """
-        print("\nYour ship's location on Computer's Board:")
-        self.computer_board.display()  # Display the user's board
-
-
-    def restart_game(self):
-        """
-        Restart the game when Computer or User ship sink or when user 
-        has used up all their attempts.
-        """
-        play_again = input("Do you want to play again? (yes/no): ")
-        if play_again.lower() == 'yes':
-            main()
-        else:
-            print("Thank you for playing! Goodbye!")
-            exit()
-
-                    
+# Main program
 def main():
     print("\nWelcome to Battleship Game")
     print("In this game, you have 5 attempts to try to sink the computer's ship.")
     print("Do you think you can do it???")
-    while True:
-        try:
-            board_size = int(input("Enter the grid size between 5 to 10 (e.g., 5 for a 5x5 grid): "))
-            if 5 <= board_size <= 10:
-                break
-            else:
-                print("Grid size must be between 5 and 10. Please try again.")
-        except ValueError: 
-            print("It is not a number, try again.")
-            
+    size = int(
+        input(f"Enter the grid size ({GRID_SIZE_MIN}-{GRID_SIZE_MAX}): ")
+    )
+    if GRID_SIZE_MIN <= size <= GRID_SIZE_MAX:
+        game = BattleshipGame(size)
+        game.play()
+    else:
+        print(f"Invalid grid size. Please choose a size between {GRID_SIZE_MIN} and {GRID_SIZE_MAX}.")
+
     print("\nLet's play!!!")
-    
-    game = Game(board_size)
-    game.display_user_ship()
-    game.play()
 
 if __name__ == "__main__":
     main()
+
