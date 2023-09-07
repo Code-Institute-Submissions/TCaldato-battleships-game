@@ -6,7 +6,6 @@ COMP_SHIP = "C"
 HIT = "X"
 GRID_SIZE_MIN = 5
 GRID_SIZE_MAX = 9
-NUM_SHIPS = 3
 SHIP_SIZE = 3
 
 # Class representing the game board
@@ -28,24 +27,32 @@ class Board:
 
 # Class representing the user's board
 class UserBoard(Board):
-    def place_ships(self):
-        for _ in range(NUM_SHIPS):
-            while True:
-                row = random.randint(1, self.size)
-                col = random.randint(1, self.size)
-                if self.grid[row - 1][col - 1] == '*':
-                    self.grid[row - 1][col - 1] = COMP_SHIP
-                    break
+    def __init__(self, size):
+        super().__init__(size)
+        self.num_ships = size * 2
 
-# Class representing the computer's board
-class ComputerBoard(Board):
     def place_ships(self):
-        for _ in range(NUM_SHIPS):
+        for _ in range(self.num_ships):
             while True:
                 row = random.randint(1, self.size)
                 col = random.randint(1, self.size)
                 if self.grid[row - 1][col - 1] == '*':
                     self.grid[row - 1][col - 1] = USER_SHIP
+                    break
+
+# Class representing the computer's board
+class ComputerBoard(Board):
+    def __init__(self, size):
+        super().__init__(size)
+        self.num_ships = size * 2
+
+    def place_ships(self):
+        for _ in range(self.num_ships):
+            while True:
+                row = random.randint(1, self.size)
+                col = random.randint(1, self.size)
+                if self.grid[row - 1][col - 1] == '*':
+                    self.grid[row - 1][col - 1] = COMP_SHIP
                     break
 
 # Class to manage the game
@@ -58,47 +65,38 @@ class BattleshipGame:
 
     def play(self):
         while True:
-            print("User's Board:")
-            self.user_board.display_grid()
-            print("\nComputer's Board:")
+            print("Try to HIT the Computer's SHIP on the computer board:")
             self.comp_board.display_grid()
-            user_row = int(input(f"Enter row (1 to {self.user_board.size - 1}): "))
-            user_col = int(input(f"Enter col (1 to {self.user_board.size - 1}): "))
+            print("\nComputer try to HIT User's SHIP on the user board :")
+            self.user_board.display_grid()
+            user_row = int(input(f"Enter row (1 to {self.user_board.size}): "))
+            user_col = int(input(f"Enter col (1 to {self.user_board.size}): "))
 
             if (
-                0 <= user_row < self.user_board.size
-                and 0 <= user_col < self.user_board.size
+                1 <= user_row <= self.user_board.size
+                and 1 <= user_col <= self.user_board.size
             ):
+                # User's turn
                 if self.comp_board.grid[user_row - 1][user_col - 1] == COMP_SHIP:
                     print("User hit a computer ship!")
                     self.comp_board.mark_hit(user_row, user_col)
                 else:
                     print("User missed.")
-                    self.user_board.mark_hit(user_row, user_col)
-                # Check for game over condition
-                if all(
-                    all(cell == HIT or cell == USER_SHIP for cell in row)
-                    for row in self.comp_board.grid
-                ):
-                    print("User wins!")
-                    break
-                comp_row = random.randint(1, self.comp_board.size)
-                comp_col = random.randint(1, self.comp_board.size)
+                    self.comp_board.mark_hit(user_row, user_col)
+
+                # Computer's turn
+                comp_row = random.randint(1, self.user_board.size)
+                comp_col = random.randint(1, self.user_board.size)
                 if self.user_board.grid[comp_row - 1][comp_col - 1] == USER_SHIP:
                     print("Computer hit a user ship!")
                     self.user_board.mark_hit(comp_row, comp_col)
                 else:
                     print("Computer missed.")
-                    self.comp_board.mark_hit(comp_row, comp_col)
-                # Check for game over condition
-                if all(
-                    all(cell == HIT or cell == COMP_SHIP for cell in row)
-                    for row in self.user_board.grid
-                ):
-                    print("Computer wins!")
-                    break
+                    self.user_board.mark_hit(comp_row, comp_col)
+                
             else:
                 print("Invalid input. Row and column must be within range.")
+
 
 # Main program
 def main():
@@ -118,4 +116,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
