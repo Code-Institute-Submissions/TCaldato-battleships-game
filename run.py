@@ -73,11 +73,11 @@ class Game:
         self.user_hits = 0  # Initialize user hits
         self.comp_hits = 0  # Initialize computer hits
 
-    def play(self):
+    def play(self, user_name):
         while True:
-            print("\nTry to HIT the Computer's SHIP on the computer board:")
+            print(f"\nCaptain {user_name} try to HIT the Computer's SHIP on the computer board:")
             self.comp_board.display_grid()
-            print("\nComputer try to HIT User's SHIP on the user board :")
+            print(f"\nComputer try to HIT {user_name}'s SHIP on the user board :")
             self.user_board.display_grid()
 
             while True:
@@ -95,18 +95,18 @@ class Game:
             ):
                 # User's turn
                 if self.comp_board.grid[user_row - 1][user_col - 1] == COMP_SHIP:
-                    print("\nUser hit a computer ship!")
+                    print(f"\nCaptain {user_name} hit a computer ship!")
                     self.comp_board.mark_hit(user_row, user_col)
                     self.user_hits += 1  # Increment user hits
                 else:
-                    print("\nUser missed.")
+                    print(f"\n{user_name} missed.")
                     self.comp_board.mark_hit(user_row, user_col)
 
                 # Computer's turn
                 comp_row = random.randint(1, self.user_board.size)
                 comp_col = random.randint(1, self.user_board.size)
                 if self.user_board.grid[comp_row - 1][comp_col - 1] == USER_SHIP:
-                    print("Computer hit a user ship!")
+                    print(f"Computer hit {user_name}'s ship!")
                     self.user_board.mark_hit(comp_row, comp_col)
                     self.comp_hits += 1  # Increment computer hits
                 else:
@@ -117,16 +117,18 @@ class Game:
                 print("Invalid input. Row and column must be within range.")
 
             # Display the scoreboard with current hits
-            print(f"\n------ User Hits: {self.user_hits} ------")
-            print(f"------ Computer Hits: {self.comp_hits} ------")
+            print("\n----------------------------------------------------")
+            print(f"----------------- {user_name} Hits: {self.user_hits}")
+            print(f"----------------- Computer Hits: {self.comp_hits}")
+            print("----------------------------------------------------")
 
             # Check for the game end condition
             if self.user_hits == 5:
-                print("Congratulations! You sank 5 of computer's ships. You win!")
+                print(f"\nCongratulations {user_name}! You sank 5 of computer's ships. You win!")
                 self.restart_game()
                 return
             elif self.comp_hits == 5:
-                print("Game Over! The computer sank 5 of your ships. You lose!")
+                print(f"\nGame Over! The computer sank 5 of your ships. Sorry {user_name}You lose!")
                 self.restart_game()
                 return
 
@@ -140,18 +142,38 @@ class Game:
         if play_again.lower() == 'yes':
             main()
         else:
-            print("Thank you for playing! Goodbye!")
+            print("Thank you Captain! See you next time")
             exit()
 
 # Main program
 def main():
-    print("\n------ Welcome to Battleship Game ------")
-    print("\nIn this game, you have 5 attempts to try to sink the computer's ship.")
+    print("\n-----x------------x----------------*----------------")
+    print("\n-x---------- WELCOME TO BATTLESHIP GAME ---------*--")
+    print("\n---------*----------------x-------------x-----------")
+    print("\nIn this game you are the Captain, and your goal is to sink 5 SHIPS.")
+    print("\nIf you are a great Captain and HIT 5 SHIPS FIRST, You WIN the GAME ")
+    print("If you are not so Great as a Captain and the COMPUTER HIT 5 of your SHIPS FIRST, You LOSE")
     print("Do you think you can do it???")
     
     while True:
+        user_name = input("\nLet's start with your name Captain: ")
+    
+        # Check if the name consists of only letters and its length is within the desired limit
+        if user_name.isalpha() and 1 <= len(user_name) <= 15:
+            break
+        else:
+            print("Are you sure this is your name Captain?")
+            print("Please enter a name that contains LETTERS between 1 to 15 characters.") 
+            
+    print("\nNow you have to choose the size of the grid to play the game.")
+    print("The size of the grid will determine the amount of the ships")
+    print("The amount will be 2X the grid, e.g., Grid size 5 will display 10 ships on both boards")
+    print("So if you increase the grid size the game will become more difficult!!!")
+    print("\nLets start???")
+
+    while True:
         try:
-            size = int(input(f"\nEnter the grid size between ({GRID_SIZE_MIN} to {GRID_SIZE_MAX}) (e.g., 5 for a 5x5 grid): "))
+            size = int(input(f"\nChoose the Size of the grid, it must be between {GRID_SIZE_MIN} to {GRID_SIZE_MAX} (e.g., 5 for a 5x5 grid): "))
             if GRID_SIZE_MIN <= size <= GRID_SIZE_MAX:
                 break
             else:
@@ -159,10 +181,10 @@ def main():
         except ValueError: 
             print("It is not a number, try again.")
                
-    print("\n------ Let's play!!! ------")
+    print("\n------------------ Let's play!!! ------------------")
 
     game = Game(size)
-    game.play()
+    game.play(user_name)
 
 if __name__ == "__main__":
     main()
