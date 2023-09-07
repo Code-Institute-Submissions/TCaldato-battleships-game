@@ -75,21 +75,26 @@ class ComputerBoard(Board):
                     self.grid[row - 1][col - 1] = COMP_SHIP
                     break
 
-# Class to manage the game
 
 
 class Game:
+    """
+    Class responsible for managing the game flow and player interaction
+    """
     def __init__(self, size):
         self.user_board = UserBoard(size)
         self.comp_board = ComputerBoard(size)
         self.user_board.place_ships()
         self.comp_board.place_ships()
-        self.user_prev_attempt = None # Variable to store the previous user's attempts
+        self.user_prev_attempt = [] # List to store user's attempts
 
         self.user_hits = 0  # Initialize user hits
         self.comp_hits = 0  # Initialize computer hits
 
     def play(self, user_name):
+        """
+        Function responsible for interaction with user and computer
+        """
         while True:
             print(
                 f"\nCaptain {user_name} try to HIT the Computer's SHIP on the computer board:")
@@ -104,44 +109,42 @@ class Game:
                         input(f"Enter row (1 to {self.user_board.size}): "))
                     user_col = int(
                         input(f"Enter column (1 to {self.user_board.size}): "))
-                    if user_row or user_col != int:
+                    
+                    # Check if the current attempt has already been made
+                    if (user_row, user_col) in self.user_prev_attempt:
+                        print("You've already made this attempt. Try again.")
+                        continue
+                    
+                    if 1 <= user_row <= self.user_board.size and 1 <= user_col <= self.user_board.size:
                         break
+                    else:
+                        print(f"Row and column must be within the range 1 to {self.user_board.size}. Try again.")
                 except ValueError:
                     print(
                         f"It is not a number between 1 to {self.user_board.size}, try again.")
                     
-            # Check if the current attempt is the same as the previous attempt
-            if self.user_prev_attempt == (user_row, user_col):
-                print("***Same Attempt as Before, Try Again:")
-                continue  # Skip the rest of the loop and ask for a new attempt
-            self.user_prev_attempt = (user_row, user_col)  # Store the current attempt
+            # Store the current attempt
+            self.user_prev_attempt.append((user_row, user_col))
             
-            if (
-                1 <= user_row <= self.user_board.size
-                and 1 <= user_col <= self.user_board.size
-            ):
-                # User's turn
-                if self.comp_board.grid[user_row - 1][user_col - 1] == COMP_SHIP:
-                    print(f"\nCaptain {user_name} hit a computer ship!")
-                    self.comp_board.mark_hit(user_row, user_col)
-                    self.user_hits += 1  # Increment user hits
-                else:
-                    print(f"\n{user_name} missed.")
-                    self.comp_board.mark_missed(user_row, user_col)
-
-                # Computer's turn
-                comp_row = random.randint(1, self.user_board.size)
-                comp_col = random.randint(1, self.user_board.size)
-                if self.user_board.grid[comp_row - 1][comp_col - 1] == USER_SHIP:
-                    print(f"Computer hit {user_name}'s ship!")
-                    self.user_board.mark_hit(comp_row, comp_col)
-                    self.comp_hits += 1  # Increment computer hits
-                else:
-                    print("Computer missed.")
-                    self.user_board.mark_missed(comp_row, comp_col)
-
+            # User's turn
+            if self.comp_board.grid[user_row - 1][user_col - 1] == COMP_SHIP:
+                print(f"\nCaptain {user_name} hit a computer ship!")
+                self.comp_board.mark_hit(user_row, user_col)
+                self.user_hits += 1  # Increment user hits
             else:
-                print("***Invalid input. Row and column must be within range.")
+                print(f"\n{user_name} missed.")
+                self.comp_board.mark_missed(user_row, user_col)
+
+            # Computer's turn
+            comp_row = random.randint(1, self.user_board.size)
+            comp_col = random.randint(1, self.user_board.size)
+            if self.user_board.grid[comp_row - 1][comp_col - 1] == USER_SHIP:
+                print(f"Computer hit {user_name}'s ship!")
+                self.user_board.mark_hit(comp_row, comp_col)
+                self.comp_hits += 1  # Increment computer hits
+            else:
+                print("Computer missed.")
+                self.user_board.mark_missed(comp_row, comp_col)
 
             # Display the scoreboard with current hits
             print("\n----------------------------------------------------")
@@ -152,12 +155,12 @@ class Game:
             # Check for the game end condition
             if self.user_hits == 5:
                 print(
-                    f"\nCongratulations {user_name}! You sank 5 of computer's ships. You win!")
+                    f"\nCongratulations {user_name}! You sank 5 of the computer's ships. You win!")
                 self.restart_game()
                 return
             elif self.comp_hits == 5:
                 print(
-                    f"\nGame Over! The computer sank 5 of your ships. Sorry {user_name}You lose!")
+                    f"\nGame Over! The computer sank 5 of your ships. Sorry {user_name}, You lose!")
                 self.restart_game()
                 return
 
