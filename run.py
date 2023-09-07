@@ -83,7 +83,7 @@ class Game:
             while True:
                 try:
                     user_row = int(input(f"Enter row (1 to {self.user_board.size}): "))
-                    user_col = int(input(f"Enter col (1 to {self.user_board.size}): "))
+                    user_col = int(input(f"Enter column (1 to {self.user_board.size}): "))
                     if user_row or user_col != int:
                         break
                 except ValueError: 
@@ -123,11 +123,25 @@ class Game:
             # Check for the game end condition
             if self.user_hits == 5:
                 print("Congratulations! You sank 5 of computer's ships. You win!")
-                break
+                self.restart_game()
+                return
             elif self.comp_hits == 5:
                 print("Game Over! The computer sank 5 of your ships. You lose!")
-                break
+                self.restart_game()
+                return
 
+    
+    def restart_game(self):
+        """
+        Restart the game when Computer or User ship sink or when user 
+        has used up all their attempts.
+        """
+        play_again = input("Do you want to play again? (yes/no): ")
+        if play_again.lower() == 'yes':
+            main()
+        else:
+            print("Thank you for playing! Goodbye!")
+            exit()
 
 # Main program
 def main():
