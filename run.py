@@ -5,7 +5,7 @@ import random  # Built-in module to make random numbers.
 import sys  # credit to pylint.readthedocs.io
 
 # Constants
-USER_SHIP = "U"
+USER_SHIP = "S"
 COMP_SHIP = "C"
 HIT = "X"
 MISS = "O"
@@ -77,6 +77,9 @@ class ComputerBoard(Board):
         super().__init__(size)
         self.num_ships = size * 2
 
+        # Grid for display if user HIT or MISSED the ship
+        self.view_grid = [['*'] * size for _ in range(size)]  
+
     def place_ships(self):
         """
         Function responsible for displaying the ships on Computer Board
@@ -89,6 +92,26 @@ class ComputerBoard(Board):
                     self.grid[row - 1][col - 1] = COMP_SHIP
                     break
 
+    def display_grid(self):
+        """
+        Display the grid with row and column numbering while hiding ships
+        """
+        print("    " + " ".join(str(i + 1) for i in range(self.size)))
+        for i in range(self.size):
+            row = [cell if cell in {HIT, MISS} else '*' for cell in self.view_grid[i]]
+            print(str(i + 1) + " | " + " ".join(row))
+    
+    def mark_hit_on_view(self, row, col):
+        """
+        Mark the grid cell with 'X' on the view grid when the user hits a ship
+        """
+        self.view_grid[row - 1][col - 1] = HIT
+
+    def mark_missed_on_view(self, row, col):
+        """
+        Mark the grid cell with 'O' on the view grid when the user misses a ship
+        """
+        self.view_grid[row - 1][col - 1] = MISS
 
 class Game:
     """
@@ -174,11 +197,15 @@ class Game:
         """
         if self.comp_board.grid[user_row - 1][user_col - 1] == COMP_SHIP:
             print(f"\nCaptain {user_name} hit a computer ship!")
-            self.comp_board.mark_hit(user_row, user_col)
+
+            # Mark HIT on View board not in game board
+            self.comp_board.mark_hit_on_view(user_row, user_col)
             self.user_hits += 1  # Increment user hits
         else:
             print(f"\nCaptain {user_name} missed.")
-            self.comp_board.mark_missed(user_row, user_col)
+
+            # Mark MISS on View board not in game board
+            self.comp_board.mark_missed_on_view(user_row, user_col)
 
         self.computer_turn(user_name)
 
@@ -194,6 +221,7 @@ class Game:
             self.comp_hits += 1  # Increment computer hits
         else:
             print("Computer missed.")
+            self.user_board.mark_missed(comp_row, comp_col)
 
         self.display_scoreboard(user_name)
 
@@ -232,7 +260,9 @@ class Game:
         if play_again.lower() == 'yes':
             main()
         else:
+            print("------------------------------------------")
             print("Thank you Captain! See you next time")
+            print("------------------------------------------")
             # This line is credited to
             # https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/consider-using-sys-exit.html
             sys.exit(0)
@@ -265,7 +295,7 @@ def main():
     print("\nNow you have to choose the size of the grid to play the game.")
     print("The size of the grid will determine the amount of the ships")
     print("The amount will be 2X the grid.")
-    print("Ee.g., Grid size 5 will display 10 ships on both boards")
+    print("E.g., Grid size 5 will display 10 ships on both boards")
     print("So if you increase the grid size the game will become harder")
     print("\nLets start???")
 
