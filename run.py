@@ -1,6 +1,6 @@
 # Libraries
 import random  # Built-in module to make random numbers.
-import os  # credit to stackoverflow.com
+import sys  # credit to pylint.readthedocs.io
 
 # Constants
 USER_SHIP = "U"
@@ -42,9 +42,11 @@ class Board:
         for i, row in enumerate(self.grid):
             print(str(i + 1) + " | " + " ".join(row))
 
-
-# Class representing the user's board
+ 
 class UserBoard(Board):
+    """
+    Class representing the user's board
+    """
     def __init__(self, size):
         super().__init__(size)
         self.num_ships = size * 2
@@ -58,10 +60,12 @@ class UserBoard(Board):
                     self.grid[row - 1][col - 1] = USER_SHIP
                     break
 
-# Class representing the computer's board
 
 
 class ComputerBoard(Board):
+    """
+    Class representing the computer's board
+    """
     def __init__(self, size):
         super().__init__(size)
         self.num_ships = size * 2
@@ -104,7 +108,9 @@ class Game:
                 continue
 
             if self.is_duplicate_attempt(user_row, user_col):
+                print("----------------------------------------------")
                 print("You've already made this attempt. Try again.")
+                print("----------------------------------------------")
                 continue
 
             self.user_prev_attempt.append((user_row, user_col))
@@ -184,8 +190,8 @@ class Game:
         else:
             print("Thank you Captain! See you next time")
             # This line is credited to
-            # https://stackoverflow.com/questions/2084508/clear-terminal-in-python
-            os.system("cls" if os.name == "nt" else "clear")
+            # https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/consider-using-sys-exit.html
+            sys.exit(0)
 
 # Main program
 
