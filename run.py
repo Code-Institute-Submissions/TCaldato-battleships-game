@@ -96,73 +96,82 @@ class Game:
         Function responsible for interaction with user and computer
         """
         while True:
-            print(
-                f"\nCaptain {user_name} try to HIT the Computer's SHIP on the computer board:")
-            self.comp_board.display_grid()
-            print(
-                f"\nComputer try to HIT {user_name}'s SHIP on the user board :")
-            self.user_board.display_grid()
+            self.display_game_boards(user_name)
 
-            while True:
-                try:
-                    user_row = int(
-                        input(f"Enter row (1 to {self.user_board.size}): "))
-                    user_col = int(
-                        input(f"Enter column (1 to {self.user_board.size}): "))
-                    
-                    # Check if the current attempt has already been made
-                    if (user_row, user_col) in self.user_prev_attempt:
-                        print("You've already made this attempt. Try again.")
-                        continue
-                    
-                    if 1 <= user_row <= self.user_board.size and 1 <= user_col <= self.user_board.size:
-                        break
-                    else:
-                        print(f"Row and column must be within the range 1 to {self.user_board.size}. Try again.")
-                except ValueError:
-                    print(
-                        f"It is not a number between 1 to {self.user_board.size}, try again.")
-                    
-            # Store the current attempt
+            user_row, user_col = self.get_user_input()
+            if not self.is_valid_user_input(user_row, user_col):
+                print(f"Row and column must be within the range 1 to {self.user_board.size}. Try again.")
+                continue
+
+            if self.is_duplicate_attempt(user_row, user_col):
+                print("You've already made this attempt. Try again.")
+                continue
+
             self.user_prev_attempt.append((user_row, user_col))
-            
-            # User's turn
-            if self.comp_board.grid[user_row - 1][user_col - 1] == COMP_SHIP:
-                print(f"\nCaptain {user_name} hit a computer ship!")
-                self.comp_board.mark_hit(user_row, user_col)
-                self.user_hits += 1  # Increment user hits
-            else:
-                print(f"\n{user_name} missed.")
-                self.comp_board.mark_missed(user_row, user_col)
 
-            # Computer's turn
-            comp_row = random.randint(1, self.user_board.size)
-            comp_col = random.randint(1, self.user_board.size)
-            if self.user_board.grid[comp_row - 1][comp_col - 1] == USER_SHIP:
-                print(f"Computer hit {user_name}'s ship!")
-                self.user_board.mark_hit(comp_row, comp_col)
-                self.comp_hits += 1  # Increment computer hits
-            else:
-                print("Computer missed.")
-                self.user_board.mark_missed(comp_row, comp_col)
+            self.user_turn(user_row, user_col, user_name)
 
-            # Display the scoreboard with current hits
-            print("\n----------------------------------------------------")
-            print(f"                  {user_name} Hits: {self.user_hits}")
-            print(f"                 Computer Hits: {self.comp_hits}")
-            print("----------------------------------------------------")
-
-            # Check for the game end condition
-            if self.user_hits == 5:
-                print(
-                    f"\nCongratulations {user_name}! You sank 5 of the computer's ships. You win!")
+            if self.check_game_over(user_name):
                 self.restart_game()
-                return
-            elif self.comp_hits == 5:
-                print(
-                    f"\nGame Over! The computer sank 5 of your ships. Sorry {user_name}, You lose!")
-                self.restart_game()
-                return
+
+    def display_game_boards(self, user_name):
+        print(f"\nCaptain {user_name} try to HIT the Computer's SHIP on the computer board:")
+        self.comp_board.display_grid()
+        print(f"\nComputer try to HIT {user_name}'s SHIP on the user board :")
+        self.user_board.display_grid()
+
+    def get_user_input(self):
+        while True:
+            try:
+                user_row = int(input(f"\nEnter row (1 to {self.user_board.size}): "))
+                user_col = int(input(f"Enter column (1 to {self.user_board.size}): "))
+                return user_row, user_col
+            except ValueError:
+                print(f"It is not a number between 1 to {self.user_board.size}, try again.")
+
+    def is_valid_user_input(self, row, col):
+        return 1 <= row <= self.user_board.size and 1 <= col <= self.user_board.size
+
+    def is_duplicate_attempt(self, row, col):
+        return (row, col) in self.user_prev_attempt
+
+    def user_turn(self, user_row, user_col, user_name):
+        if self.comp_board.grid[user_row - 1][user_col - 1] == COMP_SHIP:
+            print(f"\nCaptain {user_name} hit a computer ship!")
+            self.comp_board.mark_hit(user_row, user_col)
+            self.user_hits += 1  # Increment user hits
+        else:
+            print(f"\nCaptain {user_name} missed.")
+            self.comp_board.mark_missed(user_row, user_col)
+
+        self.computer_turn(user_name)
+
+    def computer_turn(self, user_name):
+        comp_row = random.randint(1, self.user_board.size)
+        comp_col = random.randint(1, self.user_board.size)
+        if self.user_board.grid[comp_row - 1][comp_col - 1] == USER_SHIP:
+            print(f"Computer hit {user_name}'s ship!")
+            self.user_board.mark_hit(comp_row, comp_col)
+            self.comp_hits += 1  # Increment computer hits
+        else:
+            print("Computer missed.")
+
+        self.display_scoreboard(user_name)
+
+    def display_scoreboard(self, user_name):
+        print("\n----------------------------------------------------")
+        print(f"                  {user_name} Hits: {self.user_hits}")
+        print(f"                 Computer Hits: {self.comp_hits}")
+        print("----------------------------------------------------")
+
+    def check_game_over(self, user_name):
+        if self.user_hits == 5:
+            print(f"\nCongratulations {user_name}! You sank 5 of the computer's ships. You win!")
+            return True
+        if self.comp_hits == 5:
+            print(f"\nGame Over! The computer sank 5 of your ships. Sorry {user_name}, You lose!")
+            return True
+        return False
 
     def restart_game(self):
         """
@@ -182,6 +191,9 @@ class Game:
 
 
 def main():
+    """
+    Main Function that starts the game and give the game rules
+    """
     print("\n-----x------------x----------------*----------------")
     print("\n-x---------- WELCOME TO BATTLESHIP GAME ---------*--")
     print("\n---------*----------------x-------------x-----------")
@@ -196,11 +208,11 @@ def main():
         # Check if the name consists of only letters and its length is within the desired limit
         # This line is credited to
         # https://bobbyhadz.com/blog/python-input-only-accept-one-character#:~:text=To%20only%20allow%20letters%20when,the%20user%20entered%20only%20letters.
-        if user_name.isalpha() and 1 <= len(user_name) <= 15:
+        if user_name.isalpha() and 3 <= len(user_name) <= 15:
             break
         else:
             print("Are you sure this is your name Captain?")
-            print("Please enter a name that contains LETTERS between 1 to 15 characters.")
+            print("Please enter a name that contains LETTERS between 3 to 15 characters.")
 
     print("\nNow you have to choose the size of the grid to play the game.")
     print("The size of the grid will determine the amount of the ships")
