@@ -78,7 +78,7 @@ class ComputerBoard(Board):
         self.num_ships = size * 2
 
         # Grid for display if user HIT or MISSED the ship
-        self.view_grid = [['*'] * size for _ in range(size)]  
+        self.view_grid = [['*'] * size for _ in range(size)]
 
     def place_ships(self):
         """
@@ -92,26 +92,32 @@ class ComputerBoard(Board):
                     self.grid[row - 1][col - 1] = COMP_SHIP
                     break
 
+    # Got the idea of a second grid to show the user's attempts from
+    # https://stackoverflow.com/questions/70220471/how-to-hide-value-in-array-for-battleship-game
     def display_grid(self):
         """
         Display the grid with row and column numbering while hiding ships
         """
         print("    " + " ".join(str(i + 1) for i in range(self.size)))
         for i in range(self.size):
-            row = [cell if cell in {HIT, MISS} else '*' for cell in self.view_grid[i]]
+            row = [
+                cell if cell in {HIT, MISS} else '*'
+                for cell in self.view_grid[i]
+            ]
             print(str(i + 1) + " | " + " ".join(row))
-    
+
     def mark_hit_on_view(self, row, col):
         """
-        Mark the grid cell with 'X' on the view grid when the user hits a ship
+        Mark the grid with 'X' on the view grid when the user hits a ship
         """
         self.view_grid[row - 1][col - 1] = HIT
 
     def mark_missed_on_view(self, row, col):
         """
-        Mark the grid cell with 'O' on the view grid when the user misses a ship
+        Mark the grid with 'O' on the view grid when the user misses a ship
         """
         self.view_grid[row - 1][col - 1] = MISS
+
 
 class Game:
     """
@@ -183,7 +189,10 @@ class Game:
         """
         Function responsible for checking if the user's input is valid
         """
-        return 1 <= row <= col <= self.user_board.size
+        is_valid_row = 1 <= row <= self.user_board.size
+        is_valid_col = 1 <= col <= self.user_board.size
+
+        return is_valid_row and is_valid_col
 
     def is_duplicate_attempt(self, row, col):
         """
@@ -281,7 +290,8 @@ def main():
     print("Do you think you can do it???")
 
     while True:
-        user_name = input("\nLet's start with your name Captain: ")
+        print("\nLet's start with your name Captain")
+        user_name = input("Write your name and press Enter to continue: ")
 
         # Check if the name consists of letters and its length
         # This line is credited to
@@ -293,16 +303,16 @@ def main():
             print("Enter a name using LETTERS between 3 to 15 characters")
 
     print("\nNow you have to choose the size of the grid to play the game.")
-    print("The size of the grid will determine the amount of the ships")
+    print("\nThe size of the grid will determine the amount of the ships")
     print("The amount will be 2X the grid.")
     print("E.g., Grid size 5 will display 10 ships on both boards")
-    print("So if you increase the grid size the game will become harder")
+    print("So if you increase the grid size the game will become harder!")
     print("\nLets start???")
 
     while True:
         try:
             size = int(input(
-                f"\nChoose Grid Size between {GRID_MIN} to {GRID_MAX}: "))
+                "\nChoose Grid Size between 5 to 9 and Press Enter: "))
             if GRID_MIN <= size <= GRID_MAX:
                 break
             else:
@@ -310,6 +320,11 @@ def main():
         except ValueError:
             print("It is not a number, try again.")
 
+    print("\nFirst board is yours to try HIT Computer's SHIP")
+    print("Second board is for Computer try to HIT yours SHIP")
+    print("Yours SHIPS are marked with 'S' on Computer's Board")
+    print("If a ship is HIT a 'X' will appear")
+    print("If a ship is MISSED a 'O' will appear")
     print("\n------------------ Let's play!!! ------------------")
 
     game = Game(size)
