@@ -290,7 +290,7 @@ def main():
     print("Do you think you can do it???")
 
     while True:
-        print("\nLet's start with your name Captain")
+        print("\nLet's start with your name Captain\n")
         user_name = input("Write your name and press Enter to continue: ")
 
         # Check if the name consists of letters and its length
@@ -312,7 +312,7 @@ def main():
     while True:
         try:
             size = int(input(
-                "\nChoose Grid Size between 5 to 9 and Press Enter: "))
+                "\nChoose Grid Size between 5 to 9 and Press Enter: \n"))
             if GRID_MIN <= size <= GRID_MAX:
                 break
             else:
