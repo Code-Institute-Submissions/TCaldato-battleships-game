@@ -183,7 +183,7 @@ class Game:
                 return user_row, user_col
             except ValueError:
                 print(
-                    f"Number must be between 1 to {self.user_board.size}.")
+                    f"Must be a number between 1 to {self.user_board.size}.")
 
     def is_valid_user_input(self, row, col):
         """

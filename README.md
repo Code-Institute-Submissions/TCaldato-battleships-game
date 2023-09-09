@@ -1,32 +1,62 @@
 
-# Project Development in Python in progress
-Welcome,
+# Battleships Game - (In development)
 
-This is the Code Institute student template for deploying your third portfolio project, the Python command-line project. The last update to this file was: **March 14, 2023**
+As someone who loves learning programming, I decided to create my own version of the classic game, Battleship, using Python Essentials. Have you ever played it? It's a really fun game that requires strategy and a bit of guessing. It's meant for two players, and the game board has grids where each player places their own fleet of ships. The goal is to sink your opponent's fleet before they sink yours!
 
-## Reminders
+It's a popular game played all over the world, and you can learn more about it on [Wikipedia](https://en.wikipedia.org/wiki/Battleship_(game)) if you're interested.
 
-- Your code must be placed in the `run.py` file
-- Your dependencies must be placed in the `requirements.txt` file
-- Do not edit any of the other files or your code may not deploy properly
+[View the live project here](https://battleships-jogo-5dc3cf77bd06.herokuapp.com/)
 
-## Creating the Heroku app
+![Battleship Mockup Images](readme_images/mockup-battleships.jpg)
 
-When you create the app, you will need to add two buildpacks from the _Settings_ tab. The ordering is as follows:
+## How To Play
 
-1. `heroku/python`
-2. `heroku/nodejs`
+- In this version, the player enters their name and a qustion about the grid size is made.
+- The player have to choose the Grid Size between 5 to 9.
+- Based on the size of the grid selected by the player, the ships will be shown. The number of ships will always be twice the size of the grid. For example, if the player selects a grid size of 5, there will be 10 ships displayed on both the player's and computer's boards. If the grid size is 6, then 12 ships will be shown on both boards and so on.
+- The Player can view the location of their own ships denoted by **S**, but they won't be able to see where the computer's ships are placed.
+- After all the ships are placed, each player takes turns trying to guess where the other player's ships are located on the board.
+- Guesses are marked on the board with an **O** and Hits are marked with a **X**.
+- The first to destroy 5 ships wins the game.
 
-You must then create a _Config Var_ called `PORT`. Set this to `8000`
+[Back to top](#battleships-game)
 
-If you have credentials, such as in the Love Sandwiches project, you must create another _Config Var_ called `CREDS` and paste the JSON into the value field.
+## Features
 
-Connect your GitHub repository and deploy as normal.
+### Existing Features
 
-## Constraints
+- lllllllll
 
-The deployment terminal is set to 80 columns by 24 rows. That means that each line of text needs to be 80 characters or less otherwise it will be wrapped onto a second line.
+### Future Features
 
----
+- Allow Player to position ships themselves
+- Have ships larger than 1x1
 
-Happy coding!
+## Data Model
+
+- llllll
+
+## Testing
+
+- llll
+
+### Bugs
+
+#### Solved Bugs
+
+- lllll
+#### Remaining Bugs
+
+- jjjjjjj
+
+#### Validator Testing
+
+- lllll
+
+## Deployment
+
+lllllll
+
+## Credits
+
+llllll
