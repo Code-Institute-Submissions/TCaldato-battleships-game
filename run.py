@@ -3,6 +3,7 @@ LIbraries
 """
 import random  # Built-in module to make random numbers.
 import sys  # credit to pylint.readthedocs.io
+import os  # credit to stackoverflow.com
 
 # Constants
 USER_SHIP = "S"
@@ -11,6 +12,14 @@ HIT = "X"
 MISS = "O"
 GRID_MIN = 5
 GRID_MAX = 9
+
+def clear_terminal():
+    """
+    Clears the terminal.
+    """
+    # This line is credited to
+    # https://stackoverflow.com/questions/2084508/clear-terminal-in-python
+    os.system("cls" if os.name == "nt" else "clear")
 
 
 class Board:
@@ -288,10 +297,10 @@ def main():
     print("\nIf you are a great Captain and HIT 5 SHIPS FIRST, You WIN")
     print("But if COMPUTER HIT 5 of your SHIPS FIRST, You LOSE")
     print("Do you think you can do it???")
+    print("\nLet's start with your name Captain")
 
     while True:
-        print("\nLet's start with your name Captain\n")
-        user_name = input("Write your name and press Enter to continue: ")
+        user_name = input("\nWrite your name and press Enter to continue: ")
 
         # Check if the name consists of letters and its length
         # This line is credited to
@@ -299,9 +308,10 @@ def main():
         if user_name.isalpha() and 3 <= len(user_name) <= 15:
             break
         else:
-            print("Are you sure this is your name Captain?")
+            print("\nAre you sure this is your name Captain?")
             print("Enter a name using LETTERS between 3 to 15 characters")
 
+    clear_terminal()
     print("\nNow you have to choose the size of the grid to play the game.")
     print("\nThe size of the grid will determine the amount of the ships")
     print("The amount will be 2X the grid.")
@@ -320,6 +330,7 @@ def main():
         except ValueError:
             print("It is not a number, try again.")
 
+    clear_terminal()
     print("\nFirst board is yours to try HIT Computer's SHIP")
     print("Second board is for Computer try to HIT yours SHIP")
     print("Yours SHIPS are marked with 'S' on Computer's Board")
