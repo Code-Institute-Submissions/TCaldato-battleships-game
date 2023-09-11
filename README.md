@@ -1,8 +1,7 @@
 
 # Battleships Game - (In development)
 
-As someone who loves learning programming, I decided to create my own version of the classic game, Battleship, using Python Essentials for the Course at Code Institute.
-Have you ever played it? It's a really fun game that requires strategy and a bit of guessing. It's meant for two players, and the game board has grids where each player places their own fleet of ships. The goal is to sink your opponent's fleet before they sink yours!
+As a programming enthusiast, I decided to create my own version of the classic game, Battleships, using Python Essentials for the Course at Code Institute. The game requires strategic guessing of ship locations and is designed for two players - the user and the computer. Each player has their own board, where ships are randomly placed. The objective is to destroy the computer's fleet before it destroy yours.
 
 It's a popular game played all over the world, and you can learn more about it on [Wikipedia](https://en.wikipedia.org/wiki/Battleship_(game)) if you're interested.
 
@@ -20,7 +19,7 @@ It's a popular game played all over the world, and you can learn more about it o
 - Guesses are marked on the board with an **O** and Hits are marked with a **X**.
 - The first to destroy 5 ships wins the game.
 
-[Back to top ⇧](#)
+[Back to top ⇧](#battleships-game)
 
 ## UX
 
@@ -66,10 +65,10 @@ The scope of the project involves defining requirements based on user goals. The
 - Content Requirements:
     - The user will be looking for:
         - Clear and concise instructions.
-        - A consistent theme, and game play.
+        - A consistent game play.
 - Functionality Requirements:
     - The user will be able to:
-        - Enter co-ordinates using numbers and letters.
+        - Enter co-ordinates using numbers.
         - Replay the game.
         - End the program at the end of the game.
 
@@ -98,15 +97,60 @@ A flowchart was created to clearly illustrate the logical sequence that the func
 
 - When a new game starts the welcome message is displayed.
 - It also includes the user's goal and the number of HITs needed to win the game.
-- The player is then prompted for name input. Input is repeated until a valid name is entered.
+- The player is then prompted for name input. 
 
 ![Welcome message](readme_images/welcome.jpg)
 
-#### The Game Rules
+#### The Grid Size
 
-- When a new game starts the welcome message is displayed.
+- Once the player has entered their name, they will be prompted to select the size of the grid.
+- The player is required to select a grid size ranging from 5 to 9.
+- The number of ships on both boards is determined by the grid size, with twice the number of ships as the grid size. For example, if the grid size is 5, there will be 10 ships displayed Randomly on both boards.
 
-![Game Rules](readme_images/rules_grid.jpg)
+![Grid Size](readme_images/rules_grid.jpg)
+
+#### The Boards
+
+- After selecting the grid size, the player will receive information about the First and Second boards, and how the boards will be marked.
+- The First Board is for the player to try to sink the computer's ships, which are hidden, so players cannot see where they are located.
+- On the second board, the player's ships are visibly marked with the letter **S** to indicate their location. It is the computer's objective to attempt to sink these ships during gameplay.
+- On both game boards, a ship that has been successfully sunk is marked with an **X**, while an unsuccessful attempt is marked with an **O**. These visual indicators allow players to keep track of their progress.
+- At the bottom of the board, the player will be prompted to enter the row and column using numbers, to attempt to sink the computer's ship.
+
+![Board Game](readme_images/board.jpg)
+
+- After the player selects a row and column, the result of whether the player or computer hit or missed a ship is displayed.
+- The scoreboard is displayed counting the hits made by both, Computer and Player.
+- The game will continue until the Player or Computer hits 5 ships belonging to their opponent.
+
+![Scoreboard](readme_images/scoreboard.jpg)
+
+#### The End of the Game
+
+- When Computer or Player HIT 5 ships of the opponent, the Game is Over.
+- A Game Over message will be displayed and Player will be asked if they want to Play Again.
+- If the player chooses to play again, the welcome message will be displayed and the game will start again.
+- If the player chooses not to play again, a message saying **Thank you Captain! See you next time** will appear and the game will stop.
+
+![End Game](readme_images/end_game.jpg)
+
+### Input validation and error-checking
+
+Valid information must be input by the player to proceed. The input process will persist until all necessary information is provided. The following inputs will be repeated until the player fills them with the correct information:
+
+- The Player Name on the Welcome Message, input is repeated until a valid name is entered.:
+
+![Valid Name](readme_images/no_valid_name.jpg)
+
+- The Grid Size choice, input is repeated until player choose a grid size between 5 to 9:
+
+![Valid Grid Size](readme_images/no_grid_size.jpg)
+
+
+...............
+
+
+
 
 ### Future Features
 

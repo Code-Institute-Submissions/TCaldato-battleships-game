@@ -13,6 +13,7 @@ MISS = "O"
 GRID_MIN = 5
 GRID_MAX = 9
 
+
 def clear_terminal():
     """
     Clears the terminal.
@@ -260,13 +261,13 @@ class Game:
             print(
                 f"\nCongratulations {user_name}!")
             print(
-                "You sank 5 of the computer's ships. You win!")
+                "You sank 5 of the computer's ships. You win the Game!")
             return True
         if self.comp_hits == 5:
             print(
                 "\nGame Over! The computer sank 5 of your ships.")
             print(
-                f"Sorry {user_name}, You lose!")
+                f"Sorry {user_name}, You lose the Game!")
             return True
         return False
 
