@@ -4,7 +4,7 @@ LIbraries
 import random  # Built-in module to make random numbers.
 import sys  # credit to pylint.readthedocs.io
 import os  # credit to stackoverflow.com
-import termcolor #credit to my mentor Koko
+import termcolor  # credit to my mentor Koko
 
 # Constants
 USER_SHIP = "S"
@@ -155,12 +155,14 @@ class Game:
             user_row, user_col = self.get_user_input()
             if not self.is_valid_user_input(user_row, user_col):
                 termcolor.cprint(
-                    f"Attempts must be between 1 to {self.user_board.size}.","red")
+                    f"Attempts must be between 1 to {self.user_board.size}.",
+                    "red")
                 continue
 
             if self.is_duplicate_attempt(user_row, user_col):
                 print("----------------------------------------------")
-                termcolor.cprint("You've already made this attempt. Try again.","red")
+                termcolor.cprint(
+                    "You've already made this attempt. Try again.", "red")
                 print("----------------------------------------------")
                 continue
 
@@ -194,7 +196,8 @@ class Game:
                 return user_row, user_col
             except ValueError:
                 termcolor.cprint(
-                    f"Must be a number between 1 to {self.user_board.size}.","red")
+                    f"Must be a number between 1 to {self.user_board.size}.",
+                    "red")
 
     def is_valid_user_input(self, row, col):
         """
@@ -216,7 +219,8 @@ class Game:
         Function for marking if the ship was hit and increment it on scoreboard
         """
         if self.comp_board.grid[user_row - 1][user_col - 1] == COMP_SHIP:
-            termcolor.cprint(f"\nCaptain {user_name} hit a computer ship!","green")
+            termcolor.cprint(
+                f"\nCaptain {user_name} hit a computer ship!", "green")
 
             # Mark HIT on View board not in game board
             self.comp_board.mark_hit_on_view(user_row, user_col)
@@ -236,7 +240,7 @@ class Game:
         comp_row = random.randint(1, self.user_board.size)
         comp_col = random.randint(1, self.user_board.size)
         if self.user_board.grid[comp_row - 1][comp_col - 1] == USER_SHIP:
-            termcolor.cprint(f"Computer hit {user_name}'s ship!","red")
+            termcolor.cprint(f"Computer hit {user_name}'s ship!", "red")
             self.user_board.mark_hit(comp_row, comp_col)
             self.comp_hits += 1  # Increment computer hits
         else:
@@ -260,13 +264,14 @@ class Game:
         """
         if self.user_hits == 5:
             termcolor.cprint(
-                f"\nCongratulations {user_name}!","green")
+                f"\nCongratulations {user_name}!", "green")
             print(
-                "You sank 5 of the computer's ships. You win the Game!","green")
+                "You sank 5 of the computer's ships. You win the Game!",
+                "green")
             return True
         if self.comp_hits == 5:
             termcolor.cprint(
-                "\nGame Over! The computer sank 5 of your ships.","red")
+                "\nGame Over! The computer sank 5 of your ships.", "red")
             print(
                 f"Sorry {user_name}, You lose the Game!")
             return True
@@ -277,12 +282,15 @@ class Game:
         Restart the game when Computer or User win the game
         """
         play_again = input("Do you want to play again? (yes/no): ")
-        if play_again.lower() == 'yes':
+        if play_again.lower() == 'yes' or play_again.lower() == 'y':
+            clear_terminal()
             main()
         else:
-            termcolor.cprint("------------------------------------------","magenta")
-            termcolor.cprint("Thank you Captain! See you next time","magenta")
-            termcolor.cprint("------------------------------------------","magenta")
+            termcolor.cprint(
+                "------------------------------------------", "magenta")
+            termcolor.cprint("Thank you Captain! See you next time", "magenta")
+            termcolor.cprint(
+                "------------------------------------------", "magenta")
             # This line is credited to
             # https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/consider-using-sys-exit.html
             sys.exit(0)
@@ -292,9 +300,12 @@ def main():
     """
     Main Function that starts the game and give the game rules
     """
-    termcolor.cprint("\n-----x------------x----------------*----------------","magenta")
-    termcolor.cprint("\n-x---------- WELCOME TO BATTLESHIP GAME ---------*--","magenta")
-    termcolor.cprint("\n---------*----------------x-------------x-----------","magenta")
+    termcolor.cprint(
+        "\n-----x------------x----------------*----------------", "magenta")
+    termcolor.cprint(
+        "\n-x---------- WELCOME TO BATTLESHIP GAME ---------*--", "magenta")
+    termcolor.cprint(
+        "\n---------*----------------x-------------x-----------", "magenta")
     print("\nYou are the Captain, and your goal is to sink 5 SHIPS.")
     print("\nIf you are a great Captain and HIT 5 SHIPS FIRST, You WIN")
     print("But if COMPUTER HIT 5 of your SHIPS FIRST, You LOSE")
@@ -310,7 +321,8 @@ def main():
         if user_name.isalpha() and 3 <= len(user_name) <= 15:
             break
         else:
-            termcolor.cprint("\nAre you sure this is your name Captain?","red")
+            termcolor.cprint(
+                "\nAre you sure this is your name Captain?", "red")
             print("Enter a name using LETTERS between 3 to 15 characters")
 
     clear_terminal()
@@ -328,9 +340,11 @@ def main():
             if GRID_MIN <= size <= GRID_MAX:
                 break
             else:
-                termcolor.cprint("Grid size must be between 5 and 9. Please try again.","red")
+                termcolor.cprint(
+                    "Grid size must be between 5 and 9. Please try again.",
+                    "red")
         except ValueError:
-            termcolor.cprint("It is not a number, try again.","red")
+            termcolor.cprint("It is not a number, try again.", "red")
 
     clear_terminal()
     print("\nFirst board is yours to try HIT Computer's SHIP")
@@ -338,7 +352,8 @@ def main():
     print("Yours SHIPS are marked with 'S' on Computer's Board")
     print("If a ship is HIT a 'X' will appear")
     print("If a ship is MISSED a 'O' will appear")
-    termcolor.cprint("\n------------------ Let's play!!! ------------------","blue")
+    termcolor.cprint(
+        "\n------------------ Let's play!!! ------------------", "blue")
 
     game = Game(size)
     game.play(user_name)
