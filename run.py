@@ -41,7 +41,7 @@ class Board:
 
     def mark_missed(self, row, col):
         """
-        Mark the grid cell with 'X' mark
+        Mark the grid cell with 'O' mark
         """
         self.grid[row - 1][col - 1] = MISS
 
@@ -359,7 +359,7 @@ def main():
     game.play(user_name)
 
 
-# Sugested while searching for better practices on internet and implemented
+# Sugested while searching for better practices on internet and implemented.
 # This line is credited to
 # https://stackoverflow.com/questions/419163/what-does-if-name-main-do
 if __name__ == "__main__":

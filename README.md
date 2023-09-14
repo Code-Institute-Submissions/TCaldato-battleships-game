@@ -20,13 +20,14 @@ It's a popular game played all over the world, and you can learn more about it o
     5. [Structure](#structure)
     6. [Skeleton](#skeleton)
 3. [Features](#features)
-    1. [Existing Features](#existing-features)
+    1. [Data Model](#data-model)
+    2. [Existing Features](#existing-features)
         - [The Welcome Message to Battleships Game](#the-welcome-message-to-battleships-game)
         - [The Grid Size](#the-grid-size)
         - [The Boards](#the-boards)
         - [The End of the Game](#the-end-of-the-game)
-    2. [Input validation and error-checking](#input-validation-and-error-checking)
-    3. [Future Features](#future-features)
+    3. [Input validation and error-checking](#input-validation-and-error-checking)
+    4. [Future Features](#future-features)
 4. [Technologies Used](#technologies-used)
     1. [Main Language](#main-language)
     2. [Frameworks, Libraries and Programs Used](#frameworks-libraries-and-programs-used)
@@ -125,6 +126,10 @@ A flowchart was created to clearly illustrate the logical sequence that the func
 
 ## Features
 
+### Data Model
+
+I have created a project that utilizes the Board Class as its model. The initial Board created is used to display a numbered grid and mark it when the Computer hits or misses a ship on the UserBoard. The UserBoard Class was developed using the Board Class to exhibit the location of ships and indicate where they have been marked. On the other hand, the ComputerBoard Class displays the player's attempts and is visible to them. Additionally, the ComputerBoard has a function to produce a board that is hidden from the player but records their attempts and contains the ships for increasing the scoreboard. A Game Class was created to be responsible for managing the game flow and player interaction.
+
 ### Existing Features
 
 #### The Welcome Message to Battleships Game
@@ -192,8 +197,9 @@ Valid information must be input by the player to proceed. The input process will
 
 ### Future Features
 
-- Allow Player to position ships themselves
-- Have ships larger than 1x1
+- Allow Player to position ships themselves.
+- Have ships larger than 1x1.
+- Creates a Menu on the beginning of the game separating Instructions and Game.
 
 ## Technologies Used
 
@@ -236,16 +242,12 @@ The [PEP8 Online Checker](https://extendsclass.com/python-tester.html/) service 
 
 ### Bugs
 
+During the website development, I encountered some issues. Below are the noteworthy ones along with their solutions.
+
 #### Solved Bugs
 
 - During the initial stages of the project, a bug was discovered while attempting to differentiate between computer ships and user ships. The issue arose from not creating a separate class for the user's board. Instead, a general board class was used for display the grid and the coordinates and for the user, causing problems with the code's logic. To resolve this issue, I started a new code with a new class created specifically for the user's board, and the game began running correctly.
-- .......................
-- ..................
-- .....................
-
-
-
-
+- When I was creating a game, I had left the ships visible for Computer and Player for testing purposes. But after, I ran into a problem with hiding the ships for the player. I searched the internet and found a solution on Stackoverflow that involved creating an additional board in the ComputerBoard Class. One board would display the player's attempts and be visible to them, while the other board would remain hidden from the player but would record their attempts and contain the ships to increase the scoreboard. I successfully implemented this solution and it works perfectly in the game.
 
 #### Remaining Bugs
 
@@ -344,5 +346,5 @@ Various sources were consulted to gain a better understanding of the code being 
 
 ## Acknowledgements
 
-- .............................
-............................
+- I am grateful to Seun, my tutor, for her unwavering support throughout my project. Her expert guidance and motivation helped me excel and achieve my goals.
+- I would like to thank my brother Rodrigo for his patience in helping and teaching me during my dark hours.
