@@ -1,5 +1,5 @@
 
-# Battleships Game - (In development)
+# Battleships Game
 
 As a programming enthusiast, I decided to create my own version of the classic game, Battleships, using Python Essentials for the Course at Code Institute. The game requires strategic guessing of ship locations and is designed for two players - the user and the computer. Each player has their own board, where ships are randomly placed. The objective is to destroy the computer's fleet before it destroy yours.
 
@@ -8,6 +8,40 @@ It's a popular game played all over the world, and you can learn more about it o
 [View the live project here](https://battleships-jogo-5dc3cf77bd06.herokuapp.com/)
 
 ![Battleship Mockup Images](readme_images/mockup-battleships.jpg)
+
+## Table of contents
+
+1. [How to play](#how-to-play)
+2. [UX](#ux)
+    1. [User Demographic](#user-demographic)
+    2. [New User Goals](#new-user-goals)
+    3. [Current User](#current-user)
+    4. [Scope](#scope)
+    5. [Structure](#structure)
+    6. [Skeleton](#skeleton)
+3. [Features](#features)
+    1. [Existing Features](#existing-features)
+        - [The Welcome Message to Battleships Game](#the-welcome-message-to-battleships-game)
+        - [The Grid Size](#the-grid-size)
+        - [The Boards](#the-boards)
+        - [The End of the Game](#the-end-of-the-game)
+    2. [Input validation and error-checking](#input-validation-and-error-checking)
+    3. [Future Features](#future-features)
+4. [Technologies Used](#technologies-used)
+    1. [Main Language](#main-language)
+    2. [Frameworks, Libraries and Programs Used](#frameworks-libraries-and-programs-used)
+5. [Testing](#testing)
+    1. [Validator Testing](#validator-testing)
+    2. [Bugs](#bugs)
+        - [Solved Bugs](#solved-bugs)
+        - [Remaining Bugs](#remaining-bugs)
+6. [Deployment](#deployment)
+    1. [Deploying on GitHub Pages](#deploying-on-github-pages)
+    2. [GitHub Forking and Cloning](#github-forking-and-cloning)
+    3. [Deploying on Heroku](#deploying-on-heroku)
+7. [Credits](#credits)
+    1. [Code](#code)
+8. [Acknowledgements](#acknowledgements)
 
 ## How To Play
 
@@ -97,7 +131,7 @@ A flowchart was created to clearly illustrate the logical sequence that the func
 
 - When a new game starts the welcome message is displayed.
 - It also includes the user's goal and the number of HITs needed to win the game.
-- The player is then prompted for name input. 
+- The player is then prompted for name input.
 
 ![Welcome message](readme_images/welcome.jpg)
 
@@ -161,17 +195,13 @@ Valid information must be input by the player to proceed. The input process will
 - Allow Player to position ships themselves
 - Have ships larger than 1x1
 
-## Data Model
-
-- llllll
-
 ## Technologies Used
 
 ### Main Language
 
 - [Python](https://en.wikipedia.org/wiki/Python_(programming_language) "Link to Python Wikipedia")
 
-### Frameworks, Libraries & Programs Used
+### Frameworks, Libraries and Programs Used
 
 - [GitHub](https://github.com/ "Link to GitHub")
     GitHub was used to store the project after pushing.
@@ -182,21 +212,17 @@ Valid information must be input by the player to proceed. The input process will
 
 [Back to top](#battleships-game)
 
-
 ## Testing
 
-- llll
+Testing has been an ongoing process throughout the project to identify and address any errors by following these steps:
 
-### Bugs
+- Running the program through the terminal and using the Python debugger.
+- Run the program through the PEP8 validator to ensure it meets standards.
+- Tested the game with invalid inputs, including Type Errors and Value Errors, as well as testing for out of bounds inputs and the same input twice.
+- The game has also been tested in the CI Heroku terminal.
+- Testing has been conducted by both myself and users, and currently, there are no reported issues that could cause the game to malfunction.
 
-#### Solved Bugs
-
-- lllll
-#### Remaining Bugs
-
-- jjjjjjj
-
-#### Validator Testing
+### Validator Testing
 
 The [PEP8 Online Checker](https://extendsclass.com/python-tester.html/) service was used to validate the code.
 **Results:**
@@ -207,6 +233,23 @@ The [PEP8 Online Checker](https://extendsclass.com/python-tester.html/) service 
 ![Validation results](readme_images/python_checker.jpg)
 
 </details>
+
+### Bugs
+
+#### Solved Bugs
+
+- During the initial stages of the project, a bug was discovered while attempting to differentiate between computer ships and user ships. The issue arose from not creating a separate class for the user's board. Instead, a general board class was used for display the grid and the coordinates and for the user, causing problems with the code's logic. To resolve this issue, I started a new code with a new class created specifically for the user's board, and the game began running correctly.
+- .......................
+- ..................
+- .....................
+
+
+
+
+
+#### Remaining Bugs
+
+- There are no remaining bugs found.
 
 [Back to top](#battleships-game)
 
@@ -226,13 +269,17 @@ To deploy this page to GitHub Pages from its GitHub repository, the following st
 
 ### GitHub Forking and Cloning
 
-To fork and clone the project, you will need to follow these steps:
+To fork and clone the project, you can get more information on  you will need to follow these steps:
 
 1. Forking a GitHub repository.
 
     You might fork a project to propose changes to the upstream, or original, repository. In this case, it's good practice to regularly sync your fork with the upstream repository. To do this, you'll need to use Git on the command line.
     - Navigate to the repository you wish to fork.
     - In the top-right corner of the page, click Fork.
+    - Under "Owner," select the dropdown menu and click an owner for the forked repository.
+    - By default, forks are named the same as their upstream repositories. Optionally, to further distinguish your fork, in the "Repository name" field, type a name.
+    - Optionally, in the "Description" field, type a description of your fork.
+    - Click Create fork.
 
 2. Cloning your forked repository.
 
@@ -276,14 +323,26 @@ To deploy this project to Heroku from its GitHub repository, the following steps
 
 ## Credits
 
+- The [GitHub Docs - Fork a repo](https://docs.github.com/en/github-ae@latest/get-started/quickstart/fork-a-repo "Link to an article on GitHub Docs that explains how to clone and fork a repository") webpage was utilized for instructions on forking and cloning a repository, along with the Code Institute Deployment on Heroku topic. This information was utilized in the Deployment section of the README file.
+- The [GitHub Docs - Configuring a push source](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site "Link to an article on GitHub Docs that explains how to deploy") webpage was utilized for instructions on deploying, along with the Code Institute Deployment topic.
+- The Code Institute Deploying on Heroku topic, was utilized for instructions on creating an account and deploy on Heroku.
+- The [Becky139](https://github.com/Becky139/Battleship/tree/main "Link to another student Readme") - ReadMe was utilized for reference for buinding the ReadMe.
+
+[Back to top](#battleships-game)
+
 ### Code
 
 Various sources were consulted to gain a better understanding of the code being implemented. The following sites were most frequently utilized:
 
-- [Stack Overflow](https://stackoverflow.com/ "Link to Stack Overflow page")
-- [W3Schools](https://www.w3schools.com/ "Link to W3Schools page")
-- [Heroku](https://p3-battleships.herokuapp.com/ "Link to Code Institute game on heroku")
-- [Python Package Index](https://pypi.org/ "Link to Python Package Index page")
-- [Pytlint Dev Documentation](https://pylint.readthedocs.io/en/latest/index.html "Link to Pylint page")
+- [Stack Overflow](https://stackoverflow.com/) - Link to Stack Overflow page.
+- [W3Schools](https://www.w3schools.com/) - Link to W3Schools page.
+- [Heroku](https://p3-battleships.herokuapp.com/) - Link to Code Institute game on Heroku.
+- [Python Package Index](https://pypi.org/) - Link to Python Package Index page.
+- [Pytlint Dev Documentation](https://pylint.readthedocs.io/en/latest/index.html) - Link to Pylint page.
 
 [Back to top](#battleships-game)
+
+## Acknowledgements
+
+- .............................
+............................
